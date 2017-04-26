@@ -1,18 +1,17 @@
 <?php
 
-namespace Middlewares;
+namespace HMS;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
-use Interop\Http\ServerMiddleware\MiddlewareInterface;
-use Interop\Http\ServerMiddleware\DelegateInterface;
+use Interop\Http\Message\Strategies\ServerActionInterface;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Stream;
 use GuzzleHttp\Exception\RequestException;
 
-class Proxy implements MiddlewareInterface
+class Proxy implements ServerActionInterface
 {
     /**
      * @var UriInterface
@@ -71,11 +70,10 @@ class Proxy implements MiddlewareInterface
      * Process a request and return a response.
      *
      * @param ServerRequestInterface $request
-     * @param DelegateInterface      $delegate
      *
      * @return ResponseInterface
      */
-    public function process(ServerRequestInterface $request, DelegateInterface $delegate)
+    public function __invoke(ServerRequestInterface $request)
     {
         if (!$this->client) {
             $this->client = new Client();

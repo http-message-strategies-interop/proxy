@@ -1,9 +1,8 @@
 <?php
 
-namespace Middlewares\Tests;
+namespace HMS\Tests;
 
-use Middlewares\Proxy;
-use Middlewares\Utils\Dispatcher;
+use HMS\Proxy;
 use Middlewares\Utils\Factory;
 
 class ProxyTest extends \PHPUnit_Framework_TestCase
@@ -13,9 +12,8 @@ class ProxyTest extends \PHPUnit_Framework_TestCase
         $request = Factory::createServerRequest([], 'GET', 'http://example.com/middlewares/psr15-middlewares');
         $target = Factory::createUri('https://github.com');
 
-        $response = Dispatcher::run([
-            new Proxy($target),
-        ], $request);
+        $proxy = new Proxy($target);
+        $response = $proxy($request);
 
         $html = (string) $response->getBody();
         $this->assertEquals(200, $response->getStatusCode());
